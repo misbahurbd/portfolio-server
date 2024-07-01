@@ -31,13 +31,13 @@ model Blog {
   title        String
   content      String
   featurePhoto String
-  metadataId   String        @unique
-  metadata     Metadata      @relation(fields: [metadataId], references: [id])
-  category     BlogCategory? @relation(fields: [categoryId], references: [id])
+  metadata     Metadata?
   categoryId   String?
+  category     BlogCategory? @relation(fields: [categoryId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  metadataId String?
 
   @@map("blogs")
 }
@@ -47,7 +47,7 @@ model BlogCategory {
   image String?
   label String
   slug  String  @unique
-  blog  Blog[]
+  blogs Blog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -86,8 +86,9 @@ model Metadata {
   title       String
   description String
   socialImg   String?
-  blog        Blog?
-  projectId   String   @unique
+  blogId      String?  @unique
+  blog        Blog?    @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  projectId   String?  @unique
   project     Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())

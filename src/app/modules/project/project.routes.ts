@@ -23,6 +23,6 @@ router.put(
   projectController.updateProject
 )
 
-router.delete("/:id", projectController.deleteProject)
+router.delete("/:id", checkAuth(), projectController.deleteProject)
 
 export const projectRoutes = router

@@ -23,6 +23,6 @@ router.put(
   educationController.updateEducation
 )
 
-router.delete("/:id", educationController.deleteEducation)
+router.delete("/:id", checkAuth(), educationController.deleteEducation)
 
 export const educationRoutes = router

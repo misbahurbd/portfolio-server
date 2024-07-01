@@ -1,4 +1,4 @@
-export interface ICreateBlogData {
+export interface IBlogData {
   title: string
   content: string
   featurePhoto: string

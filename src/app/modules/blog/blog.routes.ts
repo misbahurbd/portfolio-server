@@ -14,5 +14,15 @@ router.post(
 )
 
 router.get("/", blogController.getBlogs)
+router.get("/:id", blogController.getBlog)
+
+router.put(
+  "/:id",
+  checkAuth(),
+  validateRequest(blogValidation.createBlogSchema),
+  blogController.updateBlog
+)
+
+router.delete("/:id", checkAuth(), blogController.deleteBlog)
 
 export const blogRoutes = router

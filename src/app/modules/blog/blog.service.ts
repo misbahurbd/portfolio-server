@@ -5,10 +5,10 @@ import {
   parseOptions,
 } from "../../../helpers/query-helpers"
 import prisma from "../../../utils/prisma-client"
-import { ICreateBlogData } from "./blog.interface"
+import { IBlogData } from "./blog.interface"
 import { blogSearchFields } from "./blog.constant"
 
-const createBlog = async (blogData: ICreateBlogData) => {
+const createBlog = async (blogData: IBlogData) => {
   let slug = blogData.metadata.title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, "")
@@ -40,14 +40,6 @@ const createBlog = async (blogData: ICreateBlogData) => {
       },
     })
 
-    const metadata = await tx.metadata.create({
-      data: {
-        title: blogData.metadata.title,
-        description: blogData.metadata.description,
-        socialImg: blogData.metadata.socialImg,
-      },
-    })
-
     const newBlog = await tx.blog.create({
       data: {
         title: blogData.title,
@@ -55,7 +47,13 @@ const createBlog = async (blogData: ICreateBlogData) => {
         featurePhoto: blogData.featurePhoto,
         slug: uniqueSlug,
         categoryId: category.id,
-        metadataId: metadata.id,
+        metadata: {
+          create: {
+            title: blogData.metadata.title,
+            description: blogData.metadata.description,
+            socialImg: blogData.metadata.socialImg,
+          },
+        },
       },
       include: {
         category: true,
@@ -107,7 +105,81 @@ const getBlogs = async (query: any, options: IOptions) => {
   }
 }
 
+const getBlog = async (id: string) => {
+  const blog = await prisma.blog.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      category: true,
+      metadata: true,
+    },
+  })
+
+  return blog
+}
+
+const updateBlog = async (id: string, blogData: IBlogData) => {
+  const blogResult = await prisma.$transaction(async tx => {
+    const categorySlug = blogData.category
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+    const category = await tx.blogCategory.upsert({
+      where: {
+        slug: categorySlug,
+      },
+      update: {},
+      create: {
+        label: blogData.title,
+        slug: categorySlug,
+      },
+    })
+
+    const blog = await tx.blog.update({
+      where: {
+        id,
+      },
+      data: {
+        title: blogData.title,
+        content: blogData.content,
+        featurePhoto: blogData.featurePhoto,
+        categoryId: category.id,
+        metadata: {
+          update: {
+            data: {
+              title: blogData.metadata.title,
+              description: blogData.metadata.description,
+              socialImg: blogData.metadata.socialImg,
+            },
+          },
+        },
+      },
+      include: {
+        category: true,
+        metadata: true,
+      },
+    })
+
+    return blog
+  })
+
+  return blogResult
+}
+
+const deleteBlog = async (id: string) => {
+  const blog = await prisma.blog.delete({
+    where: { id },
+  })
+
+  return blog
+}
+
 export const blogService = {
   createBlog,
   getBlogs,
+  getBlog,
+  updateBlog,
+  deleteBlog,
 }
