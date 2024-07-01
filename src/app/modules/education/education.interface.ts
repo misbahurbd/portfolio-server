@@ -1,4 +1,4 @@
-export interface ICreateEducation {
+export interface IEducation {
   school: string
   location: string
   degree: string

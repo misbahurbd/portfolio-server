@@ -14,5 +14,15 @@ router.post(
 )
 
 router.get("/", educationController.getEducations)
+router.get("/:id", educationController.getEducation)
+
+router.put(
+  "/:id",
+  checkAuth(),
+  validateRequest(educationValidation.createEducationSchema),
+  educationController.updateEducation
+)
+
+router.delete("/:id", educationController.deleteEducation)
 
 export const educationRoutes = router

@@ -1,4 +1,4 @@
-export interface ICreateProjectData {
+export interface IProjectData {
   title: string
   challenges: string
   solutions: string

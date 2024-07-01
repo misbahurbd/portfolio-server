@@ -5,10 +5,12 @@ import {
   parseOptions,
 } from "../../../helpers/query-helpers"
 import prisma from "../../../utils/prisma-client"
-import { ICreateEducation } from "./education.interface"
+import { IEducation } from "./education.interface"
 import { educationSearchFields } from "./education.constant"
+import { AppError } from "../../errors/app-error"
+import httpStatus from "http-status"
 
-const createEducation = async (educationData: ICreateEducation) => {
+const createEducation = async (educationData: IEducation) => {
   const education = await prisma.education.create({
     data: educationData,
   })
@@ -50,7 +52,37 @@ const getEducations = async (query: any, options: IOptions) => {
   }
 }
 
+const getEducation = async (id: string) => {
+  const education = await prisma.education.findUnique({
+    where: { id },
+  })
+
+  return education
+}
+
+const updateEducation = async (id: string, educationData: IEducation) => {
+  const education = await prisma.education.update({
+    where: { id },
+    data: educationData,
+  })
+
+  if (!education)
+    throw new AppError(httpStatus.BAD_REQUEST, "Education not found!")
+
+  return education
+}
+
+const deleteEducation = async (id: string) => {
+  const education = await prisma.education.delete({
+    where: { id },
+  })
+  return education
+}
+
 export const educationService = {
   createEducation,
   getEducations,
+  getEducation,
+  updateEducation,
+  deleteEducation,
 }

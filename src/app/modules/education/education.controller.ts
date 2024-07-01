@@ -31,7 +31,37 @@ const getEducations = catchAsync(async (req, res) => {
   })
 })
 
+const getEducation = catchAsync(async (req, res) => {
+  const result = await educationService.getEducation(req.params.id)
+
+  sendResponse(res, {
+    message: "Education data retrived successfully!",
+    data: result,
+  })
+})
+
+const updateEducation = catchAsync(async (req, res) => {
+  const result = await educationService.updateEducation(req.params.id, req.body)
+
+  sendResponse(res, {
+    message: "Education data update successfully!",
+    data: result,
+  })
+})
+
+const deleteEducation = catchAsync(async (req, res) => {
+  await educationService.deleteEducation(req.params.id)
+
+  sendResponse(res, {
+    message: "Education delete successfully!",
+    data: null,
+  })
+})
+
 export const educationController = {
   createEducation,
   getEducations,
+  getEducation,
+  updateEducation,
+  deleteEducation,
 }

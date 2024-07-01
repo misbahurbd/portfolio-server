@@ -18,6 +18,7 @@ router.get("/:id", projectController.getProduct)
 
 router.put(
   "/:id",
+  checkAuth(),
   validateRequest(projectValidation.createProjectSchema),
   projectController.updateProject
 )

@@ -5,12 +5,12 @@ import {
   parseOptions,
 } from "../../../helpers/query-helpers"
 import prisma from "../../../utils/prisma-client"
-import { ICreateProjectData } from "./project.interface"
+import { IProjectData } from "./project.interface"
 import { projectSearchFields } from "./project.constant"
 import { AppError } from "../../errors/app-error"
 import httpStatus from "http-status"
 
-const createProject = async (projectData: ICreateProjectData) => {
+const createProject = async (projectData: IProjectData) => {
   let slug = projectData.metadata.title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, "")
@@ -102,7 +102,7 @@ const getProject = async (id: string) => {
   return project
 }
 
-const updateProject = async (id: string, projectData: ICreateProjectData) => {
+const updateProject = async (id: string, projectData: IProjectData) => {
   const project = await prisma.project.update({
     where: {
       id,
@@ -124,12 +124,9 @@ const updateProject = async (id: string, projectData: ICreateProjectData) => {
 }
 
 const deleteProject = async (id: string) => {
-  console.log({ id })
-
   const project = await prisma.project.delete({
     where: { id },
   })
-  console.log({ project })
 
   return project
 }
