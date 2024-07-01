@@ -14,7 +14,11 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: [
+      "http://localhost:5173",
+      "https://portfolio-dashboard-sandy.vercel.app",
+      "https://dashboard.misbahurbd.com",
+    ],
     credentials: true,
   })
 )
@@ -23,7 +27,7 @@ app.use(cookieParser())
 // initial route
 app.get("/", async (req: Request, res: Response) => {
   sendResponse(res, {
-    message: "Welcome to Trip Squad",
+    message: "Welcome to Misbahur Rahman portfolio",
     data: null,
   })
 })

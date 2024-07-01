@@ -132,7 +132,7 @@ const updateBlog = async (id: string, blogData: IBlogData) => {
       },
       update: {},
       create: {
-        label: blogData.title,
+        label: blogData.category,
         slug: categorySlug,
       },
     })

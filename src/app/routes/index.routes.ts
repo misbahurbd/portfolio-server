@@ -5,6 +5,7 @@ import { uploadRoutes } from "../modules/upload/upload.routes"
 import { blogRoutes } from "../modules/blog/blog.routes"
 import { projectRoutes } from "../modules/project/project.routes"
 import { educationRoutes } from "../modules/education/education.routes"
+import { experienceRoutes } from "../modules/experience/experience.routes"
 
 const router = express.Router()
 
@@ -32,6 +33,10 @@ const routers: { path: string; router: Router }[] = [
   {
     path: "/educations",
     router: educationRoutes,
+  },
+  {
+    path: "/experiences",
+    router: experienceRoutes,
   },
 ]
 

@@ -52,17 +52,17 @@ model BlogCategory {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("blog-category")
+  @@map("blog-categories")
 }
 
 model Project {
-  id           String        @id @default(uuid())
+  id           String       @id @default(uuid())
   title        String
-  slug         String        @unique
+  slug         String       @unique
   challenges   String
   solutions    String
   featurePhoto String
-  sourceLinks  SourceLinks[]
+  sourceLinks  SourceLink[]
   photos       String[]
   skills       String[]
   metadata     Metadata?
@@ -73,12 +73,14 @@ model Project {
   @@map("projects")
 }
 
-model SourceLinks {
+model SourceLink {
   id        String   @id @default(cuid())
   label     String
   link      String
   projectId String?
   project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("social-links")
 }
 
 model Metadata {
@@ -111,4 +113,19 @@ model Education {
   updatedAt DateTime @updatedAt
 
   @@map("educations")
+}
+
+model Experience {
+  id          String   @id @default(cuid())
+  title       String
+  company     String
+  location    String
+  startDate   DateTime
+  endDate     DateTime
+  description String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("experiences")
 }
