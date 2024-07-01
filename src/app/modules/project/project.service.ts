@@ -124,9 +124,12 @@ const updateProject = async (id: string, projectData: ICreateProjectData) => {
 }
 
 const deleteProject = async (id: string) => {
+  console.log({ id })
+
   const project = await prisma.project.delete({
     where: { id },
   })
+  console.log({ project })
 
   return project
 }
