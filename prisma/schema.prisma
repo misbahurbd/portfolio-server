@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  username String @unique
+  email    String @unique
+  password String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum BlogStatus {
+  draft
+  published
+}
+
+model Blog {
+  id           String        @id @default(uuid())
+  slug         String        @unique
+  title        String
+  content      String
+  featurePhoto String
+  metadataId   String        @unique
+  metadata     Metadata      @relation(fields: [metadataId], references: [id])
+  category     BlogCategory? @relation(fields: [categoryId], references: [id])
+  categoryId   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("blogs")
+}
+
+model BlogCategory {
+  id    String  @id @default(uuid())
+  image String?
+  label String
+  slug  String  @unique
+  blog  Blog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("blog-category")
+}
+
+model Project {
+  id           String        @id @default(uuid())
+  title        String
+  slug         String        @unique
+  challenges   String
+  solutions    String
+  featurePhoto String
+  sourceLinks  SourceLinks[]
+  photos       String[]
+  skills       String[]
+  metadata     Metadata?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("projects")
+}
+
+model SourceLinks {
+  id        String   @id @default(cuid())
+  label     String
+  link      String
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id])
+}
+
+model Metadata {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  socialImg   String?
+  blog        Blog?
+  projectId   String   @unique
+  project     Project? @relation(fields: [projectId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("metadata")
+}
+
+model Education {
+  id           String   @id @default(uuid())
+  school       String
+  location     String
+  degree       String
+  fieldOfStudy String
+  startDate    DateTime
+  endDate      DateTime
+  description  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("educations")
+}
