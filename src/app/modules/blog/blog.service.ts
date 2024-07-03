@@ -7,6 +7,8 @@ import {
 import prisma from "../../../utils/prisma-client"
 import { IBlogData } from "./blog.interface"
 import { blogSearchFields } from "./blog.constant"
+import { AppError } from "../../errors/app-error"
+import httpStatus from "http-status"
 
 const createBlog = async (blogData: IBlogData) => {
   let slug = blogData.metadata.title
@@ -106,15 +108,26 @@ const getBlogs = async (query: any, options: IOptions) => {
 }
 
 const getBlog = async (id: string) => {
-  const blog = await prisma.blog.findUnique({
+  const blog = await prisma.blog.findFirst({
     where: {
-      id,
+      OR: [
+        {
+          id,
+        },
+        {
+          slug: id,
+        },
+      ],
     },
     include: {
       category: true,
       metadata: true,
     },
   })
+
+  if (!blog) {
+    throw new AppError(httpStatus.NOT_FOUND, "Blog not found!")
+  }
 
   return blog
 }

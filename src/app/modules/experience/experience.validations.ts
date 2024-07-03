@@ -5,7 +5,7 @@ export const experienceSchema = z.object({
   company: z.string().min(1, "Company is required"),
   location: z.string().min(1, "Location is required"),
   startDate: z.string({ required_error: "Start date is required" }),
-  endDate: z.string({ required_error: "End date is required" }),
+  endDate: z.string({ required_error: "End date is required" }).optional(),
   description: z.string().min(1, "Description is required"),
 })
 

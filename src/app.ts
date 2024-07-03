@@ -15,9 +15,10 @@ app.use(express.urlencoded({ extended: true }))
 app.use(
   cors({
     origin: [
+      "https://misbahurbd-portfolio-dashboard.vercel.app",
+      "https://misbahurbd-portfolio.vercel.app",
+      "http://localhost:3000",
       "http://localhost:5173",
-      "https://portfolio-dashboard-sandy.vercel.app",
-      "https://dashboard.misbahurbd.com",
     ],
     credentials: true,
   })

@@ -116,12 +116,12 @@ model Education {
 }
 
 model Experience {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
   company     String
   location    String
   startDate   DateTime
-  endDate     DateTime
+  endDate     DateTime?
   description String
 
   createdAt DateTime @default(now())

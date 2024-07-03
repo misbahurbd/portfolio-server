@@ -91,13 +91,16 @@ const getProjects = async (query: any, options: IOptions) => {
 }
 
 const getProject = async (id: string) => {
-  const project = await prisma.project.findUnique({
-    where: { id },
+  const project = await prisma.project.findFirst({
+    where: { OR: [{ id }, { slug: id }] },
     include: {
       sourceLinks: true,
       metadata: true,
     },
   })
+  if (!project) {
+    throw new AppError(httpStatus.NOT_FOUND, "Project not found!")
+  }
 
   return project
 }
